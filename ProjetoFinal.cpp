@@ -138,3 +138,90 @@ void consultarNotasAluno() {
     }
     cout << "Aluno não encontrado.\n";
 }
+
+void consultarNotasDisciplina() {
+    string nome;
+    cout << "Digite o nome da disciplina: ";
+    getline(cin, nome);
+    int j = -1;
+    for (int d = 0; d < totalDisciplinas; d++) {
+        if (disciplinas[d] == nome) j = d;
+    }
+    if (j == -1) {
+        cout << "Disciplina não encontrada.\n";
+        return;
+    }
+    for (int i = 0; i < totalAlunos; i++) {
+        cout << alunos[i] << ": " << notas[i][j] << endl;
+    }
+}
+
+void calcularMedias() {
+    for (int i = 0; i < totalAlunos; i++) {
+        float soma = 0;
+        cout << "Médias de " << alunos[i] << ":\n";
+        for (int j = 0; j < totalDisciplinas; j++) {
+            cout << disciplinas[j] << ": " << notas[i][j] << endl;
+            soma += notas[i][j];
+        }
+        cout << "Média geral: " << (soma / totalDisciplinas) << "\n\n";
+    }
+}
+
+void gerarRelatorio() {
+    ofstream arquivo("relatorio.txt");
+    if (!arquivo.is_open()) {
+        cout << "Erro ao criar o relatório.\n";
+        return;
+    }
+
+    arquivo << "RELATÓRIO DE NOTAS E MÉDIAS\n\n";
+
+    for (int i = 0; i < totalAlunos; i++) {
+        arquivo << "Aluno: " << alunos[i] << " (Matrícula: " << matriculas[i] << ", Turma: " << turmas[i] << ")\n";
+        float soma = 0;
+        for (int j = 0; j < totalDisciplinas; j++) {
+            arquivo << "  " << disciplinas[j] << ": " << notas[i][j] << "\n";
+            soma += notas[i][j];
+        }
+        float media = totalDisciplinas > 0 ? soma / totalDisciplinas : 0;
+        arquivo << "  Média Geral: " << media << "\n\n";
+    }
+
+    arquivo.close();
+    cout << "Relatório salvo em 'relatorio.txt'.\n";
+}
+
+void menu() {
+    carregarAlunos();
+    carregarDisciplinas();
+    carregarNotas();
+    string opcao = "1";
+    while (opcao != "0") {
+        cout << "\n===== MENU =====\n";
+        cout << "1 - Cadastrar Aluno\n";
+        cout << "2 - Cadastrar Disciplina\n";
+        cout << "3 - Lançar Notas\n";
+        cout << "4 - Consultar Notas por Aluno\n";
+        cout << "5 - Consultar Notas por Disciplina\n";
+        cout << "6 - Calcular Médias\n";
+        cout << "7 - Gerar Relatório em TXT\n";
+        cout << "0 - Sair\n";
+        cout << "Escolha: ";
+        getline(cin, opcao);
+
+        if (opcao == "1") cadastrarAluno();
+        else if (opcao == "2") cadastrarDisciplina();
+        else if (opcao == "3") lancarNotas();
+        else if (opcao == "4") consultarNotasAluno();
+        else if (opcao == "5") consultarNotasDisciplina();
+        else if (opcao == "6") calcularMedias();
+        else if (opcao == "7") gerarRelatorio();
+        else if (opcao != "0") cout << "Opção inválida.\n";
+    }
+}
+
+int main() {
+    menu();
+    return 0;
+}
