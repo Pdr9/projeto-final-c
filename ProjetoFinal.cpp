@@ -90,3 +90,51 @@ void carregarNotas() {
     }
     arquivo.close();
 }
+
+void cadastrarAluno() {
+    string nome, matricula, turma;
+    cout << "Nome do aluno: ";
+    getline(cin, nome);
+    cout << "Matrícula: ";
+    getline(cin, matricula);
+    cout << "Turma: ";
+    getline(cin, turma);
+    salvarAluno(nome, matricula, turma);
+}
+
+void cadastrarDisciplina() {
+    string nome, codigo;
+    cout << "Nome da disciplina: ";
+    getline(cin, nome);
+    cout << "Código: ";
+    getline(cin, codigo);
+    salvarDisciplina(nome, codigo);
+}
+
+void lancarNotas() {
+    for (int i = 0; i < totalAlunos; i++) {
+        cout << "Aluno: " << alunos[i] << endl;
+        for (int j = 0; j < totalDisciplinas; j++) {
+            cout << "Nota para " << disciplinas[j] << ": ";
+            cin >> notas[i][j];
+        }
+    }
+    cin.ignore(); // Limpar buffer
+    salvarNotas();
+}
+
+void consultarNotasAluno() {
+    string nome;
+    cout << "Digite o nome do aluno: ";
+    getline(cin, nome);
+    for (int i = 0; i < totalAlunos; i++) {
+        if (alunos[i] == nome) {
+            cout << "Notas de " << nome << ":\n";
+            for (int j = 0; j < totalDisciplinas; j++) {
+                cout << disciplinas[j] << ": " << notas[i][j] << endl;
+            }
+            return;
+        }
+    }
+    cout << "Aluno não encontrado.\n";
+}
